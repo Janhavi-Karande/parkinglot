@@ -70,61 +70,67 @@ public class ParkingLotApplication {
 
 		if(isLogin.equals("Y") || isLogin.equals("y")) {
 			operatorLoginResponseDtoTicket = login(operatorLoginRequestDto, operatorController);
+			
+			System.out.println("Do you want to generate the ticket:(Y/N)");
+			String isGenerateTicket = scanner.nextLine();
+			
+			if(isGenerateTicket = "Y" || isGenerateTicket = "y"){
+				
+				System.out.println("Ticket generation");
+			
+				System.out.println("Please enter Vehicle Number:");
+				String vehicleNumber = scanner.nextLine();
+				issueTicketRequestDto.setVehicleNumber(vehicleNumber);
+				System.out.println(vehicleNumber);
 
-			System.out.println("Ticket generation");
-
-			System.out.println("Please enter Vehicle Number:");
-			String vehicleNumber = scanner.nextLine();
-			issueTicketRequestDto.setVehicleNumber(vehicleNumber);
-			System.out.println(vehicleNumber);
-
-			System.out.println("Please enter gate id:");
-			Integer gateId = scanner.nextInt();
-			issueTicketRequestDto.setGateId(gateId);
-			System.out.println(gateId);
-			scanner.nextLine();
+				System.out.println("Please enter gate id:");
+				Integer gateId = scanner.nextInt();
+				issueTicketRequestDto.setGateId(gateId);
+				System.out.println(gateId);
+				scanner.nextLine();
 
 
-			System.out.println("Please enter owner name:");
-			String ownerName = scanner.nextLine();
-			issueTicketRequestDto.setOwnerName(ownerName);
-			System.out.println(ownerName);
+				System.out.println("Please enter owner name:");
+				String ownerName = scanner.nextLine();
+				issueTicketRequestDto.setOwnerName(ownerName);
+				System.out.println(ownerName);
 
-			System.out.println("Please enter your operator id:");
-			Integer operatorId = scanner.nextInt();
-			issueTicketRequestDto.setOperatorId(operatorId);
-			System.out.println(operatorId);
-			scanner.nextLine();
+				System.out.println("Please enter your operator id:");
+				Integer operatorId = scanner.nextInt();
+				issueTicketRequestDto.setOperatorId(operatorId);
+				System.out.println(operatorId);
+				scanner.nextLine();
 
-			Integer selectedVehicleType=0;
-			try {
-				System.out.println("Please select vehicle type:");
-				System.out.println("1 -> Two wheeler \n2 -> Four Wheeler");
-				selectedVehicleType = scanner.nextInt();
+				Integer selectedVehicleType=0;
+				try {
+					System.out.println("Please select vehicle type:");
+					System.out.println("1 -> Two wheeler \n2 -> Four Wheeler");
+					selectedVehicleType = scanner.nextInt();
 
-				SupportedVehicle vehicleType;
-				if (selectedVehicleType == 1) {
-					vehicleType = SupportedVehicle.TWO_WHEELER;
-				} else if (selectedVehicleType == 2) {
-					vehicleType = SupportedVehicle.FOUR_WHEELER;
-				} else {
-					throw new IllegalArgumentException("Invalid vehicle type selected! Please enter 1 or 2.");
+					SupportedVehicle vehicleType;
+					if (selectedVehicleType == 1) {
+						vehicleType = SupportedVehicle.TWO_WHEELER;
+					} else if (selectedVehicleType == 2) {
+						vehicleType = SupportedVehicle.FOUR_WHEELER;
+					} else {
+						throw new IllegalArgumentException("Invalid vehicle type selected! Please enter 1 or 2.");
+					}
+					issueTicketRequestDto.setVehicleType(vehicleType);
+
+				} catch (IllegalArgumentException e) {
+					System.out.println(e.getMessage());
 				}
-				issueTicketRequestDto.setVehicleType(vehicleType);
 
-			} catch (IllegalArgumentException e) {
-				System.out.println(e.getMessage());  // Displays error message
+				System.out.println(selectedVehicleType);
+				scanner.nextLine();
+
+				System.out.println("Please enter owner's license number:");
+				String licenseNumber = scanner.nextLine();
+				issueTicketRequestDto.setLicenseNumber(licenseNumber);
+
+
+				issueTicketResponseDto = ticketController.issueTicket(issueTicketRequestDto);
 			}
-
-			System.out.println(selectedVehicleType);
-			scanner.nextLine();
-
-			System.out.println("Please enter owner's license number:");
-			String licenseNumber = scanner.nextLine();
-			issueTicketRequestDto.setLicenseNumber(licenseNumber);
-
-
-			issueTicketResponseDto = ticketController.issueTicket(issueTicketRequestDto);
 		}
 
 		if(issueTicketResponseDto != null && issueTicketResponseDto.getResponseStatus().equals(ResponseStatus.SUCCESS)){
@@ -159,15 +165,16 @@ public class ParkingLotApplication {
 		String isGenerateBill = scanner.nextLine();
 
 		Long ticketNumber;
-
+		Integer operatorId;
+		
 		if(isGenerateBill.equals("y") || isGenerateBill.equals("Y")) {
 			System.out.println("Please enter Ticket Number:");
 			ticketNumber = scanner.nextLong();
 			generateBillRequestDto.setTickerNumber(ticketNumber);
 
 			System.out.println("Please enter your Operator id:");
-			//operatorId = scanner.nextInt();
-			//generateBillRequestDto.setOperatorId(operatorId);
+			operatorId = scanner.nextInt();
+			generateBillRequestDto.setOperatorId(operatorId);
 
 			generateBillResponseDto = billController.generateBill(generateBillRequestDto);
 		}
