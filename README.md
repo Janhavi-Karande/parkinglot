@@ -37,7 +37,6 @@ Ensure you have the following installed:
 1.  **Clone the repository:**
     ```bash
     git clone https://github.com/Janhavi-Karande/parkinglot
-    cd parkinglot
     ```
 
 2.  **Navigate to the project directory:**
